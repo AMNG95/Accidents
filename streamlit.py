@@ -16,10 +16,40 @@ from sklearn.preprocessing import LabelEncoder
 from imblearn.over_sampling import SMOTE
 import xgboost
 import sklearn
+import gdown
 
 # Chargement des données
-dffinal = pd.read_csv(r'C:\Users\angem\Documents\Accidents\dffinal.csv', sep=',')
-df_model = pd.read_csv(r'C:\Users\angem\Documents\Accidents\df_model.csv', sep=',')
+# ID du fichier Google Drive (à récupérer dans l'URL de partage)
+dffinal_ID = "1qgriVZfLRNW7ud1HgXLb4hYwRcel5RFo"
+dffinal_file = "dffinal.csv"
+
+# URL du fichier Google Drive
+dffinal_URL = f"https://drive.google.com/uc?id={dffinal_ID}"
+
+# Télécharger le fichier CSV
+@st.cache_data
+def load_data():
+    gdown.download(dffinal_URL, dffinal_file, quiet=False)
+    return pd.read_csv(dffinal_file)
+
+# Charger les données
+dffinal = load_data()
+
+# ID du fichier Google Drive (à récupérer dans l'URL de partage)
+df_model_ID = "1seaUfdCCc-0vY59l-Q_9X7dyukZPBqak"
+df_model_file = "df_model.csv"
+
+# URL du fichier Google Drive
+df_model_URL = f"https://drive.google.com/uc?id={df_model_ID}"
+
+# Télécharger le fichier CSV
+@st.cache_data
+def load_data_1():
+    gdown.download(df_model_URL, df_model_file, quiet=False)
+    return pd.read_csv(df_model_file)
+
+# Charger les données
+df_model = load_data_1()
 
 # Prétraitement des données
 df_model['dep'] = df_model['dep'].astype('object')
