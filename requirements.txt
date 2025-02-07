@@ -1,4 +1,6 @@
 streamlit
+gdown
+google-cloud-storage
 pandas
 numpy
 matplotlib
