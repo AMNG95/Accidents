@@ -18,4 +18,3 @@ import xgboost
 import sklearn
 import gdown
 import os
-from google.colab import drive
