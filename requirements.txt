@@ -11,6 +11,5 @@ plotly
 scikit-learn
 xgboost
 imbalanced-learn
-os
 pyproj
 fiona
