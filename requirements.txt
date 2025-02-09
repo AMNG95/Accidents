@@ -1,6 +1,5 @@
+pip --upgrade pip
 streamlit
-gdown
-google-cloud-storage
 pandas
 numpy
 matplotlib
@@ -8,8 +7,10 @@ seaborn
 geopandas
 shapely
 plotly
-scikit-learn
-xgboost
+scikit-learn==1.3.0
+xgboost==1.6.2
 imbalanced-learn
+gdown
+google-cloud-storage
 pyproj
 fiona
