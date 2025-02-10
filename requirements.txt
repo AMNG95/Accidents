@@ -16,3 +16,4 @@ pyproj
 fiona
 fastparquet
 setuptools
+watchdog
