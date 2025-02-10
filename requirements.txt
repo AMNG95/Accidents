@@ -1,11 +1,12 @@
 streamlit
 pandas
+numpy==1.24.3
 matplotlib
 seaborn
 geopandas
 shapely
 plotly
-scikit-learn==1.3.0
+scikit-learn==1.2.2
 xgboost==1.6.2
 imbalanced-learn
 gdown
