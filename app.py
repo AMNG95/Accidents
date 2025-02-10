@@ -34,10 +34,16 @@ def load_data(parquet_file, csv_file, url):
 url_df_model = 'https://drive.google.com/uc?id=1-Fuva7dJ7evX8MSDtBTUuwSFmsaIf2Ow'
 url_df_cleaned2023 = 'https://drive.google.com/uc?id=1g2dDfywtZK9BTWFp2u0i0MqO98U5S8NC'
 
-# Chargement des fichiers en priorité depuis Parquet
-df_model = load_data('df_model.parquet', 'df_model.csv', url_df_model)
-dffinal2023 = load_data('df_model_2023.parquet', 'df_model_2023.csv', url_df_cleaned2023)
-df_model = pd.concat([df_model, dffinal2023])
+# Fonction pour traiter les données et éviter un chargement trop long
+@st.cache_data
+def process_data():
+    df_model = load_data('df_model.parquet', 'df_model.csv', url_df_model)
+    df_model_2023 = load_data('df_model_2023.parquet', 'df_model_2023.csv', url_df_cleaned2023)
+    return pd.concat([df_model, df_model_2023])
+
+df_model = process_data()
+
+st.write("✅ Données chargées avec succès ! Nombre de lignes :", df_model.shape[0])
 
 # Prétraitement
 df_model['dep'] = df_model['dep'].astype('object')
