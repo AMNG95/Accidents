@@ -19,31 +19,24 @@ import sklearn
 import gdown
 import os
 
-# Fonction de téléchargement des fichiers depuis Google Drive
+# Fonction pour charger les données depuis Google Drive et convertir en Parquet
 @st.cache_data
-def download_file(url, output):
-    gdown.download(url, output, quiet=False)
-    return output
+def load_data(parquet_file, csv_file, url):
+    if os.path.exists(parquet_file):
+        return pd.read_parquet(parquet_file)
+    else:
+        gdown.download(url, csv_file, quiet=False)
+        df = pd.read_csv(csv_file, sep=',', on_bad_lines='skip', index_col=0)
+        df.to_parquet(parquet_file, engine='fastparquet', compression='snappy')
+        return df
 
 # Définition des URLs des fichiers Google Drive
 url_df_model = 'https://drive.google.com/uc?id=1-Fuva7dJ7evX8MSDtBTUuwSFmsaIf2Ow'
-output_df_model = download_file(url_df_model, 'df_model.csv')
-
 url_df_cleaned2023 = 'https://drive.google.com/uc?id=1g2dDfywtZK9BTWFp2u0i0MqO98U5S8NC'
-output_df_cleaned2023 = download_file(url_df_cleaned2023, 'df_model_2023.csv')
 
-# Conversion en Parquet pour réduire la taille des fichiers
-def convert_to_parquet(csv_file, parquet_file):
-    if not os.path.exists(parquet_file):
-        df = pd.read_csv(csv_file, sep=',', on_bad_lines='skip', index_col=0)
-        df.to_parquet(parquet_file, engine='fastparquet', compression='snappy')
-    return parquet_file
-
-parquet_df_model = convert_to_parquet(output_df_model, 'df_model.parquet')
-parquet_df_cleaned2023 = convert_to_parquet(output_df_cleaned2023, 'df_model_2023.parquet')
-
-df_model = pd.read_parquet(parquet_df_model)
-dffinal2023 = pd.read_parquet(parquet_df_cleaned2023)
+# Chargement des fichiers en priorité depuis Parquet
+df_model = load_data('df_model.parquet', 'df_model.csv', url_df_model)
+dffinal2023 = load_data('df_model_2023.parquet', 'df_model_2023.csv', url_df_cleaned2023)
 df_model = pd.concat([df_model, dffinal2023])
 
 # Prétraitement
@@ -101,6 +94,3 @@ if page == "Outil de prédiction":
 
     except Exception as e:
         st.error(f"Erreur lors de la transformation des données : {e}")
-
-    # Afficher les catégories connues pour debug
-    st.write("Catégories connues par l'encodeur :", encoder.get_feature_names_out(cat_cols))
