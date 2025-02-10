@@ -101,3 +101,6 @@ if page == "Outil de prédiction":
 
     except Exception as e:
         st.error(f"Erreur lors de la transformation des données : {e}")
+
+    # Afficher les catégories connues pour debug
+    st.write("Catégories connues par l'encodeur :", encoder.get_feature_names_out(cat_cols))
