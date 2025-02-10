@@ -19,14 +19,18 @@ import sklearn
 import gdown
 import os
 
+# Fonction de téléchargement des fichiers depuis Google Drive
+@st.cache_data
+def download_file(url, output):
+    gdown.download(url, output, quiet=False)
+    return output
+
 # Définition des URLs des fichiers Google Drive
 url_df_model = 'https://drive.google.com/uc?id=1-Fuva7dJ7evX8MSDtBTUuwSFmsaIf2Ow'
-output_df_model = 'df_model.csv'
-gdown.download(url_df_model, output_df_model, quiet=False)
+output_df_model = download_file(url_df_model, 'df_model.csv')
 
 url_df_cleaned2023 = 'https://drive.google.com/uc?id=1g2dDfywtZK9BTWFp2u0i0MqO98U5S8NC'
-output_df_cleaned2023 = 'df_model_2023.csv'
-gdown.download(url_df_cleaned2023, output_df_cleaned2023, quiet=False)
+output_df_cleaned2023 = download_file(url_df_cleaned2023, 'df_model_2023.csv')
 
 # Conversion en Parquet pour réduire la taille des fichiers
 def convert_to_parquet(csv_file, parquet_file):
